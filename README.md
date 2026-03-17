@@ -2,56 +2,71 @@
 
 ## 📌 Overview
 
-This project implements a **smart contract for software license sales** using **Solidity** on the Ethereum blockchain.
+This project implements a simple smart contract for software license sales using Solidity.
 
-The contract automates the process of:
-- purchasing a software license
-- tracking usage
-- handling refund requests
-- releasing funds based on predefined conditions
+The contract simulates:
+- license purchase with ETH
+- usage confirmation
+- refund request and approval
+- automatic fund release after a fixed time period
 
 ---
 
-## ⚙️ How It Works
+## ⚙️ Process Flow
 
-The smart contract follows a simple business process:
-
-1. **Contract Deployment**
-   - The seller deploys the contract and sets the license price.
-
-2. **License Purchase**
-   - A buyer sends ETH to the contract.
-   - Funds are locked in the contract (escrow).
-
-3. **Usage Confirmation**
-   - The buyer confirms that the software has been used.
-
-4. **Refund Request (Optional)**
-   - The buyer can request a refund.
-   - The seller approves or rejects the request.
-
-5. **Finalization**
-   - After a fixed time period (7 days):
-     - If refund is approved → funds go to the buyer
-     - Otherwise → funds go to the seller
+1. Contract is deployed by the seller with a fixed price
+2. Buyer purchases a license by sending ETH
+3. Buyer confirms usage of the software
+4. Buyer can request a refund (optional)
+5. Seller approves or rejects the refund
+6. After 7 days, funds are released:
+   - to buyer (if refund approved)
+   - otherwise to seller
 
 ---
 
 ## ✨ Features
 
-- 💰 Secure ETH payment handling
-- 🔒 Escrow mechanism (funds locked in contract)
-- 🔁 Refund request system
-- ⏱ Time-based finalization (7 days)
-- 📊 State machine-based workflow
-- 📢 Event logging for key actions
+- ETH payment handling
+- Escrow mechanism
+- Refund request system
+- Time-based finalization
+- State machine logic
+- Event logging
 
 ---
 
-## 🧠 Smart Contract Structure
+## 🧠 Main Functions
 
-The contract includes:
+- `buyLicense()` – purchase license
+- `confirmUsage()` – confirm usage
+- `requestRefund()` – request refund
+- `approveRefund()` / `rejectRefund()` – seller decision
+- `finalize()` – release funds
 
-- **State Machine**
-  ```solidity
-  enum State { Created, Paid, Active, RefundRequested, Completed }
+---
+
+## 🛠️ Tech Stack
+
+- Solidity (^0.8.0)
+- Remix IDE
+- Ethereum Virtual Machine (Remix VM)
+
+---
+
+## 🚀 Usage
+
+1. Open Remix IDE
+2. Create `LicenseContract.sol`
+3. Compile contract
+4. Deploy with price:
+   100000000000000000 (0.1 ETH in wei)
+5. Interact via UI
+
+---
+
+## 📄 Notes
+
+- One buyer per contract
+- Usage is manually confirmed
+- No external integrations (email, keys, etc.)
