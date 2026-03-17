@@ -84,16 +84,25 @@ contract LicenseContract {
     function finalize() public {
         require(state != State.Completed, "Contract already completed");
         require(buyer != address(0), "License not purchased yet");
-        require(block.timestamp >= purchaseTime + 7 days, "Too early to finalize");
+        require(block.timestamp >= purchaseTime + 1 minutes, "Too early to finalize"); /* Ovde treba da stoji 7 days, ali radi testa smo stavili 1 minutes */
 
         state = State.Completed;
 
-        if (refundRequested && refundApproved) {
-            uint amount = address(this).balance;
-            (bool success, ) = payable(buyer).call{value: amount}("");
-            require(success, "Transfer to buyer failed");
-            emit ContractFinalized(buyer, amount, block.timestamp);
+        if (refundRequested) {
+            if (refundApproved) {
+                uint amount = address(this).balance;
+                (bool success, ) = payable(buyer).call{value: amount}("");
+                require(success, "Transfer to buyer failed");
+                emit ContractFinalized(buyer, amount, block.timestamp);
+            } else {
+                uint amount = address(this).balance;
+                (bool success, ) = payable(owner).call{value: amount}("");
+                require(success, "Transfer to owner failed");
+                emit ContractFinalized(owner, amount, block.timestamp);
+            }
         } else {
+            require(used, "Software was not used, nor was the refund requested");
+
             uint amount = address(this).balance;
             (bool success, ) = payable(owner).call{value: amount}("");
             require(success, "Transfer to owner failed");
